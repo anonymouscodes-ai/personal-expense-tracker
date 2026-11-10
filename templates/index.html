@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Personal Expense Tracker</h1>
+    <p>Track your spending. Manage your money.</p>
+
+    <!-- Total Expenses -->
+    <h2>My Expense Dashboard</h2>
+
+    <h3>Total Expenses</h3>
+    <p>₹{{ "%.2f"|format(total) }}</p>
+
+    <!-- Add Expense Form -->
+    <h3>Add a New Expense</h3>
+
+    <form method="POST" action="/">
+
+        <label>Expense Name:</label>
+        <input type="text" name="name"
+               placeholder="Enter expense name" required>
+
+        <label>Amount:</label>
+        <input type="number" name="amount"
+               placeholder="Enter amount"
+               min="0.01" step="0.01" required>
+
+        <label>Category:</label>
+        <input type="text" name="category"
+               placeholder="Enter category" required>
+
+        <button type="submit">Add Expense</button>
+
+    </form>
+
+    <!-- Category-wise Spending -->
+    <h3>Category-wise Spending</h3>
+
+    <div class="category-summary">
+        {% for category, amount in category_totals.items() %}
+            <p>
+                <strong>{{ category }}:</strong>
+                ₹{{ "%.2f"|format(amount) }}
+            </p>
+        {% endfor %}
+    </div>
+
+    <!-- Pie Chart -->
+    <h3>Spending Breakdown - Pie Chart</h3>
+
+    <div class="charts">
+        <div>
+            <canvas id="expensePieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <h3>Spending Breakdown - Bar Chart</h3>
+
+    <div class="charts">
+        <div>
+            <canvas id="expenseBarChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Expense History -->
+    <h3>Expense History</h3>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Category</th>
+        </tr>
+
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense[0] }}</td>
+            <td>{{ expense[1] }}</td>
+            <td>₹{{ "%.2f"|format(expense[2]) }}</td>
+            <td>{{ expense[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const categories = {{ category_totals.keys() | list | tojson }};
+        const amounts = {{ category_totals.values() | list | tojson }};
+
+        new Chart(document.getElementById("expensePieChart"), {
+            type: "pie",
+            data: {
+                labels: categories,
+                datasets: [{
+                    data: amounts
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        new Chart(document.getElementById("expenseBarChart"), {
+            type: "bar",
+            data: {
+                labels: categories,
+                datasets: [{
+                    label: "Amount spent (₹)",
+                    data: amounts
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
