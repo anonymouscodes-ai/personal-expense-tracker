@@ -41,39 +41,27 @@ ExpenseTracker/
 
 1. Clone this repository:
 
-```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-```
+git clone https://github.com/anonymouscodes-ai/personal-expense-tracker.git
 
 2. Enter the project folder:
 
-```bash
 cd ExpenseTracker
-```
 
 3. Create a virtual environment:
 
-```bash
 python3 -m venv .venv
-```
 
 4. Activate it:
 
-```bash
 source .venv/bin/activate
-```
 
 5. Install dependencies:
 
-```bash
 pip install -r requirements.txt
-```
 
 6. Run the application:
 
-```bash
 python app.py
-```
 
 7. Open http://127.0.0.1:5000 in your browser.
 
